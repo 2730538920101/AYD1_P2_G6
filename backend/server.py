@@ -65,6 +65,12 @@ def crearPelicula():
     except:
         print("NO SE PUEDE CREAR EL ACTOR")
         return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA"})
+    
+# Endpoint para mostrar todos los actores registrados
+@app.route('/mostrarActores', methods=["GET"])
+def mostrarActores():
+    actores = controlador.VerActores()
+    return jsonify(actores)
 
 
 if __name__ == '__main__':
