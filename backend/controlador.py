@@ -28,3 +28,15 @@ def AgregarPelicula(nombre, director, estreno, resumen, trailer):
                        (nombre, director, estreno, resumen, trailer))
     conexion.commit()
     conexion.close()
+
+# Controlador para ver todos los actores en la base de datos
+
+def VerActores():
+    conexion = obtener_conexion()
+    actores = []
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT * FROM ACTOR")
+        actores = cursor.fetchall()
+        actores = [{"ACT_ID":actor[0], "NOMBRE":actor[1], "DESCRIPCION": actor[2], "FOTO":actor[3], "FECHA_NACIMIENTO":actor[4]}for actor in actores]
+    conexion.close()
+    return actores
