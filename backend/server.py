@@ -17,6 +17,22 @@ def index():
         print("NO SE PUEDE ESTABLECER LA CONEXION A LA BASE DE DATOS")
         return jsonify({'AYD1': "NO SE PUEDE ESTABLECER LA CONEXION A LA BASE DE DATOS"})
 
+# Endpoint para almacenar un usuario en la base de datos    
+@app.route('/crearUsuario', methods=['POST'])
+def crearUsuario():
+    try:
+        info = request.json
+        nom = info['nombre']
+        ape = info['apellido']
+        mail = info['correo']
+        passw = info['password']
+        print(nom, ape, mail, passw)
+        controlador.AgregarUsuario(nom, ape, mail, passw)
+        return jsonify({"respuesta":"SE AGREGO UN CONTACTO EXITOSAMENTE"})
+    except:
+        print("NO SE PUEDE CREAR EL USUARIO")
+        return jsonify({'respuesta': "NO SE PUEDE CREAR EL USUARIO"})
+
 
 
 if __name__ == '__main__':
