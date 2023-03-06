@@ -33,6 +33,22 @@ def crearUsuario():
         print("NO SE PUEDE CREAR EL USUARIO")
         return jsonify({'respuesta': "NO SE PUEDE CREAR EL USUARIO"})
 
+@app.route('/crearActor', methods=['POST'])
+def crearActor():
+    try:
+        info = request.json
+        nom = info['nombre']
+        des = info['descripcion']
+        pic = info['foto']
+        nac = info['fecha_nacimiento']
+        print(nom, des, pic, nac)
+        controlador.AgregarActor(nom, des, pic, nac)
+        return jsonify({"respuesta":"SE AGREGO UN ACTOR EXITOSAMENTE"})
+    except:
+        print("NO SE PUEDE CREAR EL ACTOR")
+        return jsonify({'respuesta': "NO SE PUEDE CREAR EL ACTOR"})
+
+
 
 
 if __name__ == '__main__':
