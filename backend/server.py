@@ -33,6 +33,7 @@ def crearUsuario():
         print("NO SE PUEDE CREAR EL USUARIO")
         return jsonify({'respuesta': "NO SE PUEDE CREAR EL USUARIO"})
 
+# Endpoint para almacenar un actor en la base de datos
 @app.route('/crearActor', methods=['POST'])
 def crearActor():
     try:
@@ -48,7 +49,22 @@ def crearActor():
         print("NO SE PUEDE CREAR EL ACTOR")
         return jsonify({'respuesta': "NO SE PUEDE CREAR EL ACTOR"})
 
-
+# Endpoint para almacenar una pelicula en la base de datos
+@app.route('/crearPelicula', methods=['POST'])
+def crearPelicula():
+    try:
+        info = request.json
+        nom = info['nombre']
+        dir = info['director']
+        estreno = info['fecha_estreno']
+        res = info['resumen']
+        tra = info['trailer']
+        print(nom, dir, estreno, res, tra)
+        controlador.AgregarPelicula(nom, dir, estreno, res, tra)
+        return jsonify({"respuesta":"SE AGREGO UNA PELICULA EXITOSAMENTE"})
+    except:
+        print("NO SE PUEDE CREAR EL ACTOR")
+        return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA"})
 
 
 if __name__ == '__main__':
