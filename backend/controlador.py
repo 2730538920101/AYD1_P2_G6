@@ -1,5 +1,20 @@
 from conexion import obtener_conexion
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+
+# Controlador para buscar contactos en la base de datos
+def BuscarUsuario(nombre_usuario, contrasenia):
+    conexion = obtener_conexion()
+    usuario = None
+    with conexion.cursor() as cursor:
+        cursor.execute(
+            "SELECT Nombre,Password FROM USUARIO WHERE Nombre = %s", (nombre_usuario,))
+        usuario = cursor.fetchone()
+        if usuario and check_password_hash(usuario[1], contrasenia):
+            usuario = usuario[0]
+        else:
+            usuario = None
+    conexion.close()
+    return usuario
 
 # Controlador para agregar usuarios a la base de datos
 def AgregarUsuario(nombre, apellido, correo, password):
