@@ -17,6 +17,12 @@ def index():
         print("NO SE PUEDE ESTABLECER LA CONEXION A LA BASE DE DATOS")
         return jsonify({'AYD1': "NO SE PUEDE ESTABLECER LA CONEXION A LA BASE DE DATOS"})
 
+# Endpoint para obtener un usuario existente en la base de datos
+@app.route('/buscarUsuario/<nombre>/<contrasenia>', methods=['GET'])
+def BuscarUsuario(nombre, contrasenia):
+    usuario = controlador.BuscarUsuario(nombre, contrasenia)
+    return jsonify({"respuesta":usuario})
+
 # Endpoint para almacenar un usuario en la base de datos    
 @app.route('/crearUsuario', methods=['POST'])
 def crearUsuario():
