@@ -65,12 +65,13 @@ def crearPelicula():
         estreno = info['fecha_estreno']
         res = info['resumen']
         tra = info['trailer']
-        print(nom, dir, estreno, res, tra)
-        controlador.AgregarPelicula(nom, dir, estreno, res, tra)
-        return jsonify({"respuesta":"SE AGREGO UNA PELICULA EXITOSAMENTE"})
+        rep = info['reparto']
+        print(nom, dir, estreno, res, tra, rep)
+        controlador.AgregarPelicula(nom, dir, estreno, res, tra, rep)
+        return jsonify({"respuesta":"SE AGREGO UNA PELICULA Y SU REPARTO EXITOSAMENTE"})
     except:
         print("NO SE PUEDE CREAR EL ACTOR")
-        return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA"})
+        return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA Y SU REPARTO"})
     
 # Endpoint para mostrar todos los actores registrados
 @app.route('/mostrarActores', methods=["GET"])

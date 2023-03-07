@@ -36,13 +36,15 @@ def AgregarActor(nombre, descripcion, foto, fecha_nac):
     conexion.close()
 
 # Controlador para agregar peliculas a la base de datos
-def AgregarPelicula(nombre, director, estreno, resumen, trailer):
+def AgregarPelicula(nombre, director, estreno, resumen, trailer, reparto):
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
         cursor.execute("INSERT INTO PELICULA(NOMBRE, DIRECTOR, FECHA_ESTRENO, RESUMEN, TRAILER) VALUES (%s, %s, %s, %s, %s)",
                        (nombre, director, estreno, resumen, trailer))
         last_insert_id = cursor.lastrowid
         print(last_insert_id)
+        for actor in reparto:
+            cursor.execute("INSERT INTO REPARTO(PELICULA_PEL_ID, ACTOR_ACT_ID) VALUES(%s, %s)",(last_insert_id, actor)) 
     conexion.commit()
     conexion.close()
 
