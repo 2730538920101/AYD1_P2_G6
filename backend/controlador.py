@@ -30,7 +30,6 @@ def AgregarPelicula(nombre, director, estreno, resumen, trailer):
     conexion.close()
 
 # Controlador para ver todos los actores en la base de datos
-
 def VerActores():
     conexion = obtener_conexion()
     actores = []
@@ -40,3 +39,26 @@ def VerActores():
         actores = [{"ACT_ID":actor[0], "NOMBRE":actor[1], "DESCRIPCION": actor[2], "FOTO":actor[3], "FECHA_NACIMIENTO":actor[4]}for actor in actores]
     conexion.close()
     return actores
+
+# Controlador para ver todas las peliculas que hay en la base de datos
+def VerPeliculas():
+    conexion = obtener_conexion()
+    peliculas = []
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT * FROM PELICULA")
+        peliculas = cursor.fetchall()
+        peliculas = [{"PEL_ID":pelicula[0], "NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], "TRAILER":pelicula[5]}for pelicula in peliculas]
+    conexion.close()
+    return peliculas
+
+# Controlador para ver toda la informacion de una pelicula
+def VerPelicula(id):
+    conexion = obtener_conexion()
+    pelicula = None
+    with conexion.cursor() as cursor:
+        cursor.execute(
+            "SELECT * FROM PELICULA WHERE PEL_ID = %s", (id,))
+        pelicula = cursor.fetchone()
+        peliculajson = {"NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], "TRAILER":pelicula[5]}
+    conexion.close()
+    return peliculajson

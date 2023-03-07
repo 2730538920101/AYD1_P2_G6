@@ -28,7 +28,7 @@ def crearUsuario():
         passw = info['password']
         print(nom, ape, mail, passw)
         controlador.AgregarUsuario(nom, ape, mail, passw)
-        return jsonify({"respuesta":"SE AGREGO UN CONTACTO EXITOSAMENTE"})
+        return jsonify({"respuesta":"SE AGREGO UN USUARIO EXITOSAMENTE"})
     except:
         print("NO SE PUEDE CREAR EL USUARIO")
         return jsonify({'respuesta': "NO SE PUEDE CREAR EL USUARIO"})
@@ -69,9 +69,33 @@ def crearPelicula():
 # Endpoint para mostrar todos los actores registrados
 @app.route('/mostrarActores', methods=["GET"])
 def mostrarActores():
-    actores = controlador.VerActores()
-    return jsonify(actores)
+    try:
+        actores = controlador.VerActores()
+        return jsonify(actores)
+    except:
+        print("NO SE PUEDE MOSTRAR LOS ACTORES")
+        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LOS ACTORES"})
 
+# Endpoint para mostrar todas las peliculas registradas
+@app.route('/mostrarPeliculas', methods=["GET"])
+def mostrarPeliculas():
+    try:
+        peliculas = controlador.VerPeliculas()
+        return jsonify(peliculas)
+    except:
+        print("NO SE PUEDE MOSTRAR LAS PELICULAS")
+        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LAS PELICULAS"})
+    
+# Endpoint para mostrar toda la informacion de una pelicula
+@app.route('/mostrarPelicula/<int:id>', methods=["GET"])
+def mostrarPelicula(id):
+    try:
+        pelicula = controlador.VerPelicula(id)
+        return pelicula
+    except:
+        print("NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + id)
+        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + id})
+    
 
 if __name__ == '__main__':
     print("SERVIDOR INICIADO EN EL PUERTO: 5000")
