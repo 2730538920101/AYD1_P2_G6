@@ -6,10 +6,10 @@ export const AutoComplete = ({ options, setSelected }) => {
   return (
     <Typeahead
       id="basic-example"
-      className="p-3 w-auto h-auto"
+      className="p-3 w-auto"
       onChange={(selected) => setSelected(selected)}
-      multiple
       options={options}
+      clearButton
       placeholder="Agregar Actores al reparto"
       filterBy={["", "NOMBRE"]}
       labelKey={(option) => `${option.NOMBRE}`}

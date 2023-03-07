@@ -24,6 +24,7 @@ const validationSchema = z.object({
 const FormPelicula = () => {
   const [status, error, data] = GetActors();
   const [actors, setActors] = useState([]);
+  const [cast, setCast] = useState([]);
   const methods = useForm({
     resolver: zodResolver(validationSchema),
   });
@@ -36,11 +37,9 @@ const FormPelicula = () => {
   } = methods;
 
   useEffect(() => {
-
-    if (actors.length === 0) {
-      setIsError("El reparto no puede ser vacio");
+    if (cast.length === 0) {
       return;
-    } else { 
+    } else {
       setIsError("");
     }
 
@@ -71,12 +70,14 @@ const FormPelicula = () => {
   }
 
   const onSubmitForm = async (values) => {
-    if(actors.length === 0) {
-      return
+    if (cast.length === 0) {
+      return;
     }
 
-    const requestBody = {...values, reparto: [...actors.map((actor)=> actor.ACT_ID) ]}
-
+    const requestBody = {
+      ...values,
+      reparto: [...actors.map((actor) => actor.ACT_ID)],
+    };
 
     await fetch(`${API_URL}/crearPelicula`, {
       method: "POST",
@@ -84,19 +85,42 @@ const FormPelicula = () => {
       headers: { "Content-type": "application/json; charset=UTF-8" },
     })
       .then((response) => response.json())
-      .then(() => {})
-      .catch((error) => {
-        console.log(error);
+      .then(() => {
+        setCast([]);
+      })
+      .catch(() => {
         setIsError("Ha ocurrido un error al procesar la peticion");
       });
   };
 
+  const handleOnActorSelect = (selectedValue) => {
+    if (selectedValue.length === 0) {
+      return;
+    }
+
+    const existentActor = cast.findIndex(
+      (actor) => actor.NOMBRE === selectedValue[0].NOMBRE
+    );
+    if (existentActor > -1) {
+      return;
+    }
+
+    const temporalCast = [...cast];
+    temporalCast.push({ ...selectedValue[0] });
+    setCast([...temporalCast]);
+
+    const index = data.findIndex(
+      (actor) => actor.NOMBRE === selectedValue[0].NOMBRE
+    );
+    if (index > -1) {
+      data.slice(index, 1);
+    }
+  };
+
   return (
     <div className="h-screen flex mt-auto ">
-      <div className="max-w-md ml-auto  my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
-        <h2 className="font-medium antialiased p-2">
-          Registrar Nueva Pelicula
-        </h2>
+      <div className="lg:w-4/5 ml-auto  my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
+        <h2 className="font-medium antialiased p-2">Registrar Usuario</h2>
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(onSubmitForm)}>
             <FormInput
@@ -123,7 +147,7 @@ const FormPelicula = () => {
               type="date"
               register={register}
             />
-            <AutoComplete options={data} setSelected={setActors} />
+            <AutoComplete options={data} setSelected={handleOnActorSelect} />
             <FormInput
               placeholder="Resumen"
               errors={errors}
@@ -156,7 +180,7 @@ const FormPelicula = () => {
       <div className="max-w-md my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl p-4 mx-auto">
         <h2>Miembros del reparto</h2>
         <ListGroup>
-          {actors.map((actor, index) => (
+          {cast.map((actor, index) => (
             <ListGroup.Item key={index}>{actor.NOMBRE}</ListGroup.Item>
           ))}
         </ListGroup>

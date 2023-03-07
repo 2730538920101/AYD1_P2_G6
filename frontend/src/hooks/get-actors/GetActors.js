@@ -15,7 +15,6 @@ const GetActors = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log("en hook: ", response);
           setData(response);
           setStatus("ok");
         })
