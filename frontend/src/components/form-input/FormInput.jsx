@@ -12,11 +12,7 @@ const FormInput = ({
 }) => {
   return (
     <Form.Group className="p-3 w-auto" controlId={controlId}>
-      <FloatingLabel
-        controlId="floatingInput"
-        label={placeholder}
-        className="mb-3"
-      >
+      <FloatingLabel controlId={controlId} label={placeholder} className="mb-3">
         <Form.Control
           type={type}
           placeholder={placeholder}
