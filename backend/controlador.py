@@ -41,6 +41,8 @@ def AgregarPelicula(nombre, director, estreno, resumen, trailer):
     with conexion.cursor() as cursor:
         cursor.execute("INSERT INTO PELICULA(NOMBRE, DIRECTOR, FECHA_ESTRENO, RESUMEN, TRAILER) VALUES (%s, %s, %s, %s, %s)",
                        (nombre, director, estreno, resumen, trailer))
+        last_insert_id = cursor.lastrowid
+        print(last_insert_id)
     conexion.commit()
     conexion.close()
 
