@@ -90,8 +90,12 @@ WHERE PELICULA.PEL_ID = ''' + str(id)
         cursor.execute(query2)
         reparto = cursor.fetchall()
         
+        listareparto = []
+        for x in reparto:
+            listareparto.append({"REP_ID": x[0], "ACT_ID": x[1],"NOMBRE": x[2],"DESCRIPCION":x[3], "FOTO": x[4], "FECHA_NACIMIENTO": x[5]})
+        
         peliculajson = {"NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], 
                         "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], 
-                        "TRAILER":pelicula[5], "REPARTO":reparto}
+                        "TRAILER":pelicula[5], "REPARTO":listareparto}
     conexion.close()
     return peliculajson
