@@ -78,6 +78,17 @@ def VerPelicula(id):
         cursor.execute(
             "SELECT * FROM PELICULA WHERE PEL_ID = %s", (id,))
         pelicula = cursor.fetchone()
-        peliculajson = {"NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], "TRAILER":pelicula[5]}
+        
+        cursor.execute('''
+SELECT REP_ID, ACT_ID, ACTOR.NOMBRE, DESCRIPCION, FOTO, FECHA_NACIMIENTO 
+from ((REPARTO 
+inner JOIN ACTOR ON REPARTO.ACTOR_ACT_ID = ACTOR. ACT_ID)
+inner JOIN  PELICULA ON REPARTO.PELICULA_PEL_ID = PELICULA.PEL_ID)
+WHERE PELICULA.PEL_ID = %s;''',(id,))
+        reparto = cursor.fetchall()
+        
+        peliculajson = {"NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], 
+                        "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], 
+                        "TRAILER":pelicula[5], "REPARTO":reparto}
     conexion.close()
     return peliculajson
