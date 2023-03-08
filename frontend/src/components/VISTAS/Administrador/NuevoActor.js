@@ -1,12 +1,12 @@
 import React from 'react'
+import ActorForm from '../../actor-form/ActorForm'
 import NavbarA from '../../Navbars/NavbarA'
 
 function NuevoActor() {
   return (
     <>
-    
     <NavbarA/>
-        <h1>NuevoActor</h1>
+      <ActorForm />
     </>
 
   )
