@@ -100,8 +100,8 @@ def mostrarPelicula(id):
         pelicula = controlador.VerPelicula(id)
         return pelicula
     except:
-        print("NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + id)
-        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + id})
+        print("NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + str(id))
+        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + str(id)})
     
 
 if __name__ == '__main__':

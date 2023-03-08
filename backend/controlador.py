@@ -75,16 +75,19 @@ def VerPelicula(id):
     conexion = obtener_conexion()
     pelicula = None
     with conexion.cursor() as cursor:
-        cursor.execute(
-            "SELECT * FROM PELICULA WHERE PEL_ID = %s", (id,))
+        query = "SELECT * FROM PELICULA WHERE PEL_ID = " + str(id)
+        #print(query)
+        cursor.execute(query)
         pelicula = cursor.fetchone()
         
-        cursor.execute('''
+        query2 = '''
 SELECT REP_ID, ACT_ID, ACTOR.NOMBRE, DESCRIPCION, FOTO, FECHA_NACIMIENTO 
 from ((REPARTO 
 inner JOIN ACTOR ON REPARTO.ACTOR_ACT_ID = ACTOR. ACT_ID)
 inner JOIN  PELICULA ON REPARTO.PELICULA_PEL_ID = PELICULA.PEL_ID)
-WHERE PELICULA.PEL_ID = %s;''',(id,))
+WHERE PELICULA.PEL_ID = ''' + str(id)
+        print(query2)
+        cursor.execute(query2)
         reparto = cursor.fetchall()
         
         peliculajson = {"NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], 
