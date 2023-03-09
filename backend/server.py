@@ -122,7 +122,7 @@ def mostrarPelicula(id):
         return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + str(id)})
     
 @app.route('/mostrarActor/<int:id>', methods=["GET"])
-def mostrarPelicula(id):
+def mostrarActor(id):
     try:
         actor = controlador.VerActor(id)
         return actor
