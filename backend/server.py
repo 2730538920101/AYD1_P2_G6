@@ -72,7 +72,25 @@ def crearPelicula():
     except:
         print("NO SE PUEDE CREAR EL ACTOR")
         return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA Y SU REPARTO"})
-    
+
+# Endpoint para agregar una pelicula al watchlist
+@app.route('/agregarPeliculaWatchlist', methods=['POST'])
+def agregarPeliculaWatchlist():
+    try:
+        info = request.json
+        id_usuario = info['id_usuario']
+        id_pelicula = info['id_pelicula']
+        controlador.AgregarPeliculaWatchlist(id_usuario, id_pelicula)
+        return jsonify({"respuesta":"SE AGREGO LA PELICULA AL WATCHLIST CORRECTAMENTE"})
+    except:
+        return jsonify({"respuesta":"NO SE PUEDE AGREGAR LA PELICULA AL WATCHLIST"})
+
+# Endpoint para eliminar una pelicula del watchlist
+@app.route('/eliminarPeliculaWatchlist/<int:IdPelicula>', methods=["DELETE"])
+def eliminarPeliculaWatchlist(IdPelicula):
+    controlador.EliminarPeliculaWatchlist(IdPelicula)
+    return jsonify({"respuesta":"SE ELIMINO CORRECTAMENTE LA PELICULA DEL WATCHLIST"})
+
 # Endpoint para mostrar todos los actores registrados
 @app.route('/mostrarActores', methods=["GET"])
 def mostrarActores():

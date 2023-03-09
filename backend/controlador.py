@@ -7,7 +7,7 @@ def BuscarUsuario(nombre_usuario, contrasenia):
     usuario = None
     with conexion.cursor() as cursor:
         cursor.execute(
-            "SELECT Nombre,Password FROM USUARIO WHERE Nombre = %s", (nombre_usuario,))
+            "SELECT Usu_id, Password FROM USUARIO WHERE Nombre = %s", (nombre_usuario,))
         usuario = cursor.fetchone()
         if usuario and check_password_hash(usuario[1], contrasenia):
             usuario = usuario[0]
@@ -45,6 +45,23 @@ def AgregarPelicula(nombre, director, estreno, resumen, trailer, reparto):
         print(last_insert_id)
         for actor in reparto:
             cursor.execute("INSERT INTO REPARTO(PELICULA_PEL_ID, ACTOR_ACT_ID) VALUES(%s, %s)",(last_insert_id, actor)) 
+    conexion.commit()
+    conexion.close()
+
+# Controlador para agregar una pelicula al watchlist
+def AgregarPeliculaWatchlist(id_usuario, id_pelicula):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("INSERT INTO WATCHLIST(Usuario_usu_id, Pelicula_pel_id) VALUES (%s, %s)",
+                       (id_usuario, id_pelicula))
+    conexion.commit()
+    conexion.close()
+
+# Controlador para eliminar una pelicula agregada en el watchlist
+def EliminarPeliculaWatchlist(id):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("DELETE FROM WATCHLIST WHERE Wat_id = %s", (id,))
     conexion.commit()
     conexion.close()
 
