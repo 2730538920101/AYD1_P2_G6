@@ -23,7 +23,6 @@ const validationSchema = z.object({
 
 const FormPelicula = () => {
   const [status, error, data] = GetActors();
-  const [actors, setActors] = useState([]);
   const [cast, setCast] = useState([]);
   const methods = useForm({
     resolver: zodResolver(validationSchema),
@@ -37,17 +36,11 @@ const FormPelicula = () => {
   } = methods;
 
   useEffect(() => {
-    if (cast.length === 0) {
-      return;
-    } else {
-      setIsError("");
-    }
-
     if (isSubmitSuccessful) {
       reset();
     }
     // eslint-disable-next-line
-  }, [isSubmitSuccessful, actors]);
+  }, [isSubmitSuccessful]);
 
   if (status === "procesando") {
     return (
@@ -76,7 +69,7 @@ const FormPelicula = () => {
 
     const requestBody = {
       ...values,
-      reparto: [...actors.map((actor) => actor.ACT_ID)],
+      reparto: [...cast.map((cast) => cast.ACT_ID)],
     };
 
     await fetch(`${API_URL}/crearPelicula`, {
@@ -119,8 +112,10 @@ const FormPelicula = () => {
 
   return (
     <div className="h-screen flex mt-auto ">
-      <div className="lg:w-4/5 ml-auto  my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
-        <h2 className="font-medium antialiased p-2">Registrar Usuario</h2>
+      <div className="lg:w-4/5 m-auto  my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
+        <h2 className="font-medium antialiased p-2 flex justify-center">
+          Registrar Nueva Pelicula
+        </h2>
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(onSubmitForm)}>
             <FormInput
@@ -177,14 +172,16 @@ const FormPelicula = () => {
         )}
       </div>
 
-      <div className="max-w-md my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl p-4 mx-auto">
-        <h2>Miembros del reparto</h2>
-        <ListGroup>
-          {cast.map((actor, index) => (
-            <ListGroup.Item key={index}>{actor.NOMBRE}</ListGroup.Item>
-          ))}
-        </ListGroup>
-      </div>
+      {cast.length !== 0 && (
+        <div className="max-w-md my-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl p-4 mx-auto">
+          <h2>Miembros del reparto</h2>
+          <ListGroup>
+            {cast.map((actor, index) => (
+              <ListGroup.Item key={index}>{actor.NOMBRE}</ListGroup.Item>
+            ))}
+          </ListGroup>
+        </div>
+      )}
     </div>
   );
 };
