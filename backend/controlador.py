@@ -86,7 +86,7 @@ from ((REPARTO
 inner JOIN ACTOR ON REPARTO.ACTOR_ACT_ID = ACTOR. ACT_ID)
 inner JOIN  PELICULA ON REPARTO.PELICULA_PEL_ID = PELICULA.PEL_ID)
 WHERE PELICULA.PEL_ID = ''' + str(id)
-        print(query2)
+        #print(query2)
         cursor.execute(query2)
         reparto = cursor.fetchall()
         
@@ -97,5 +97,20 @@ WHERE PELICULA.PEL_ID = ''' + str(id)
         peliculajson = {"NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], 
                         "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], 
                         "TRAILER":pelicula[5], "REPARTO":listareparto}
+    conexion.close()
+    return peliculajson
+
+#Controlador para ver la informacion de un actor en particular 
+def VerActor(id):
+    conexion = obtener_conexion()
+    pelicula = None
+    with conexion.cursor() as cursor:
+        query = "SELECT * FROM ACTOR WHERE ACT_ID = " + str(id)
+        #print(query)
+        cursor.execute(query)
+        pelicula = cursor.fetchone()
+              
+        peliculajson = {"ID":pelicula[0],"NOMBRE":pelicula[1], "DESCRIPCION": pelicula[2], 
+                        "FOTO":pelicula[3], "FECHA_NACIMIENTO":pelicula[4]}
     conexion.close()
     return peliculajson

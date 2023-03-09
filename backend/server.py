@@ -103,6 +103,15 @@ def mostrarPelicula(id):
         print("NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + str(id))
         return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LA PELICULA CON EL ID " + str(id)})
     
+@app.route('/mostrarActor/<int:id>', methods=["GET"])
+def mostrarPelicula(id):
+    try:
+        actor = controlador.VerActor(id)
+        return actor
+    except:
+        print("NO SE PUEDE MOSTRAR EL ACTOR CON EL ID " + str(id))
+        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR EL ACTOR CON EL ID " + str(id)})
+    
 
 if __name__ == '__main__':
     print("SERVIDOR INICIADO EN EL PUERTO: 5000")
