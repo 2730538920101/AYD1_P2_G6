@@ -48,6 +48,15 @@ def AgregarPelicula(nombre, director, estreno, resumen, trailer, reparto):
     conexion.commit()
     conexion.close()
 
+# Controlador para agregar una pelicula al watchlist
+def AgregarPeliculaWatchlist(id_usuario, id_pelicula):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("INSERT INTO WATCHLIST(Usuario_usu_id, Pelicula_pel_id) VALUES (%s, %s)",
+                       (id_usuario, id_pelicula))
+    conexion.commit()
+    conexion.close()
+
 # Controlador para eliminar una pelicula agregada en el watchlist
 def EliminarPeliculaWatchlist(id):
     conexion = obtener_conexion()
