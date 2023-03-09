@@ -59,7 +59,7 @@ const ActorForm = () => {
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(onSubmitForm)}>
             <FormInput
-              placeholder="Ingresa el nombre de la pelicula"
+              placeholder="Ingresa el nombre del actor"
               errors={errors}
               name="nombre"
               controlId="idActorName"
