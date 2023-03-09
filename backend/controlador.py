@@ -7,7 +7,7 @@ def BuscarUsuario(nombre_usuario, contrasenia):
     usuario = None
     with conexion.cursor() as cursor:
         cursor.execute(
-            "SELECT Nombre,Password FROM USUARIO WHERE Nombre = %s", (nombre_usuario,))
+            "SELECT Usu_id, Password FROM USUARIO WHERE Nombre = %s", (nombre_usuario,))
         usuario = cursor.fetchone()
         if usuario and check_password_hash(usuario[1], contrasenia):
             usuario = usuario[0]
