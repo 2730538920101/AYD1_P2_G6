@@ -110,7 +110,16 @@ def mostrarPeliculas():
     except:
         print("NO SE PUEDE MOSTRAR LAS PELICULAS")
         return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LAS PELICULAS"})
-    
+
+@app.route('/mostrarWatchlist', methods=["GET"])
+def mostrarWatchlist():
+    try:
+        request_data = request.get_json()
+        Watchlist = controlador.MostrarWatchlist(request_data["id_usuario"])   
+        return Watchlist
+    except:
+        print("Error: No es posible mostrar el Watchlist del usuario.")
+        return jsonify({'respuesta': "Error: No es posible mostrar el Watchlist del usuario."})
 # Endpoint para mostrar toda la informacion de una pelicula
 @app.route('/mostrarPelicula/<int:id>', methods=["GET"])
 def mostrarPelicula(id):
