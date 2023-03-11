@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import API_URL from "../../app/constants";
 
-const useGetMovie = ({id}) => {
-  const [status, setStatus] = useState("");
-  const [error, setError] = useState("");
-  const [data, setData] = useState("");
+const useGetMovie = (id) => {
+  const [status, setStatus] = useState("sleep");
+  const [error, setError] = useState(undefined);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     async function getMovie() {
