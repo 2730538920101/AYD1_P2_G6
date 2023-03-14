@@ -9,9 +9,9 @@ const NavbarU = () => {
           <Navbar bg="dark" variant="dark">
             <Container> 
               <Nav className="me-auto  mx-auto">
-                <Nav.Link href="/Peliculas">Películas</Nav.Link>
-                <Nav.Link href="/WatchList">WatchList</Nav.Link>
-                <Nav.Link href="/">Cerrar Sesión</Nav.Link>
+                <Nav.Link href="/Peliculas" style={{ color: 'white' }}>Películas</Nav.Link>
+                <Nav.Link href="/WatchList" style={{ color: 'white' }}>WatchList</Nav.Link>
+                <Nav.Link href="/" style={{ color: 'white' }}>Cerrar Sesión</Nav.Link>
               </Nav>
             </Container>
           </Navbar> 
