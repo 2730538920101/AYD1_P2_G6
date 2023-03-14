@@ -48,6 +48,15 @@ def AgregarPelicula(nombre, director, estreno, resumen, trailer, reparto):
     conexion.commit()
     conexion.close()
 
+# Controlador para agregar peliculas a la base de datos
+def CalificarPelicula(id_usuario, id_pelicula, punteo):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("INSERT INTO CALIFICACION(USUARIO_USU_ID, PELICULA_PEL_ID, PUNTEO) VALUES (%s, %s, %s)",
+                       (id_usuario, id_pelicula, punteo))
+    conexion.commit()
+    conexion.close()
+
 # Controlador para agregar una pelicula al watchlist
 def AgregarPeliculaWatchlist(id_usuario, id_pelicula):
     conexion = obtener_conexion()
