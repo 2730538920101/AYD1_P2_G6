@@ -131,3 +131,11 @@ def VerActor(id):
                         "FOTO":pelicula[3], "FECHA_NACIMIENTO":pelicula[4]}
     conexion.close()
     return peliculajson
+
+def AgregarComentario(id_usuario,id_pelicula, descripcion):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+         cursor.execute("INSERT INTO COMENTARIO(USUARIO_USU_ID, PELICULA_PEL_ID,DESCRIPCION) VALUES (%s, %s,%s)",
+                (id_usuario, id_pelicula,descripcion))
+    conexion.commit()
+    conexion.close()

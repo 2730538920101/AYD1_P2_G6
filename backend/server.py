@@ -73,6 +73,19 @@ def crearPelicula():
         print("NO SE PUEDE CREAR EL ACTOR")
         return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA Y SU REPARTO"})
 
+@app.route('/agregarComentario', methods=['POST'])
+def agregarComentario():
+    try:
+        data = request.json
+        id_usuario = data['id_usuario']
+        id_pelicula = data['id_pelicula']
+        descripcion = data['descripcion']
+        controlador.AgregarComentario(id_usuario,id_pelicula, descripcion)
+        return jsonify({"respuesta":"Se agrego el comentario con exito."})
+    except:
+        print("NO SE PUEDE CREAR EL ACTOR")
+        return jsonify({'respuesta': "Error: No se pudo agregar el comentario, intentelo denuevo."})
+
 # Endpoint para agregar una pelicula al watchlist
 @app.route('/agregarPeliculaWatchlist', methods=['POST'])
 def agregarPeliculaWatchlist():
