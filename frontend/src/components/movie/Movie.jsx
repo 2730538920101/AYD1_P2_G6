@@ -1,8 +1,8 @@
 import { Alert, Button, FloatingLabel, Form, Spinner } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import Rating from "@mui/material/Rating";
 import useGetMovie from "../../hooks/get-movie/useGetMovie";
 import NavbarU from "../Navbars/NavbarU";
+import Rating from "@mui/material/Rating";
 import TextField from '@mui/material/TextField';
 
 const Movie = () => {
@@ -39,7 +39,7 @@ const Movie = () => {
         (item, index) =>
           index < 5 && (
             <li key={item.ACT_ID} className="inline">
-              <Link to={`/infoActor/${item.ACT_ID}`}>{item.NOMBRE}</Link>
+              <Link to={`/infoActor/${item.ACT_ID}`} style={{ fontSize: '20px', color: "white" }}>{item.NOMBRE}</Link>
             </li>
           )
       );
@@ -102,7 +102,7 @@ const Movie = () => {
             alt="no-image"
           />
         </div>
-        <div className="flex justify-center h-8">
+        <div className="flex justify-center h-8"> 
           <ul className="inline-block space-x-4">{renderReparto()}</ul>
         </div>
         <div className="flex align-items-start justify-center h-8">
@@ -110,15 +110,20 @@ const Movie = () => {
         </div>
       </div>
       <div className="mt-3 p-2 w-full">
-        <h2>Deja un comentario</h2>
-        <TextField
-          sx={{width:"50%", padding:"2"}}
-          id="outlined-multiline-flexible"
-          label="Deja tu comentario"
-          variant="filled"
-          multiline
-          rows={5}
-        />
+        <h2 style={{ color: 'white' }}>Deja un comentario</h2>
+
+        <div style={{ backgroundColor: 'white', width: '50%', border: 'none', borderRadius: '10px' }}>
+          <TextField
+            sx={{ width: "100%", padding: "2" }}
+            id="outlined-multiline-flexible"
+            label="Deja tu comentario"
+            variant="filled"
+            multiline
+            rows={5}
+          />
+        </div>
+
+
       </div>
     </>
   );

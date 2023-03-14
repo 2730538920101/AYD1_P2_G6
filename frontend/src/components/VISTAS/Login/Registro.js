@@ -54,10 +54,10 @@ function Registro() {
   };
 
   return (
-    <div>
-      <Container>
+    <div> 
+    <Container style={{width: "20%"}}>
         <div style={{ margin: "2%" }}>
-          <h1>Registro</h1>
+          <h1 style={{ color: 'white' }}>Registro</h1>
           <FormProvider {...methods}>
             <Form onSubmit={handleSubmit(onSubmitForm)}>
               <FormInput

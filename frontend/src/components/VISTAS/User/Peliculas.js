@@ -71,7 +71,7 @@ function Peliculas() {
       <div>
         <br></br>
         <Container>
-          <h1>Peliculas</h1>
+          <h1 style={{ color: 'white' }}>Peliculas</h1>
           <MaterialReactTable
             columns={columns}
             data={data}

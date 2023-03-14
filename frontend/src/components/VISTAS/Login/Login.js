@@ -62,9 +62,9 @@ function Login() {
 
   return (
     <div>
-      <Container>
+      <Container style={{width: "20%"}}>
         <br></br>
-        <h1>Login</h1>
+        <h1 style={{ color: 'white' }}>Login</h1>
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(onSubmitFormSesion)}>
             <FormInput

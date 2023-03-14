@@ -8,9 +8,9 @@ function ColorSchemesExample() {
       <Navbar bg="dark" variant="dark">
         <Container> 
           <Nav className="me-auto  mx-auto">
-            <Nav.Link href="/NuevaPelicula">Nueva Película</Nav.Link>
-            <Nav.Link href="/NuevoActor">Nuevo Actor</Nav.Link>
-            <Nav.Link href="/">Cerrar Sesión</Nav.Link>
+            <Nav.Link href="/NuevaPelicula" style={{ color: 'white' }}>Nueva Película</Nav.Link>
+            <Nav.Link href="/NuevoActor" style={{ color: 'white' }}>Nuevo Actor</Nav.Link>
+            <Nav.Link href="/" style={{ color: 'white' }}>Cerrar Sesión</Nav.Link>
           </Nav>
         </Container>
       </Navbar> 
