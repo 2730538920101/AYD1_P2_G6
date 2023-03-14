@@ -139,3 +139,20 @@ def AgregarComentario(id_usuario,id_pelicula, descripcion):
                 (id_usuario, id_pelicula,descripcion))
     conexion.commit()
     conexion.close()
+    
+    
+def Ultimas5PelActor(id):
+    conexion = obtener_conexion()    
+    with conexion.cursor() as cursor:
+        query = '''select PELICULA.PEL_ID, PELICULA.NOMBRE, PELICULA.DIRECTOR, PELICULA.FECHA_ESTRENO, PELICULA.RESUMEN, PELICULA.TRAILER   
+from (REPARTO 
+INNER JOIN PELICULA ON PELICULA.PEL_ID = REPARTO.PELICULA_PEL_ID)
+WHERE ACTOR_ACT_ID = '''+ str(id) +''' 
+order by str_to_date(PELICULA.FECHA_ESTRENO, '%d/%m/%y') DESC LIMIT 5;'''
+        print(query)
+        cursor.execute(query)
+        peliculas = cursor.fetchall()
+              
+        peliculaJSON = [{"PEL_ID":pelicula[0], "NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], "TRAILER":pelicula[5] }for pelicula in peliculas]
+    conexion.close()
+    return peliculaJSON

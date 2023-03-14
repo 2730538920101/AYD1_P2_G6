@@ -142,6 +142,16 @@ def mostrarActor(id):
     except:
         print("NO SE PUEDE MOSTRAR EL ACTOR CON EL ID " + str(id))
         return jsonify({'respuesta': "NO SE PUEDE MOSTRAR EL ACTOR CON EL ID " + str(id)})
+ 
+ 
+@app.route('/obtenerUltimas5PeliculasActor/<int:id>', methods=["GET"])
+def mostrarUltimas5PelisActor(id):
+    try:
+        pelis = controlador.Ultimas5PelActor(id)
+        return jsonify(pelis)
+    except:
+        print("NO SE PUEDE MOSTRAR LAS PELICULAS DEL ACTOR CON EL ID " + str(id))
+        return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LAS PELICULAS DEL ACTOR CON EL ID " + str(id)})   
     
 
 if __name__ == '__main__':
