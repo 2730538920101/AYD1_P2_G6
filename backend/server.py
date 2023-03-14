@@ -73,6 +73,19 @@ def crearPelicula():
         print("NO SE PUEDE CREAR EL ACTOR")
         return jsonify({'respuesta': "NO SE PUEDE CREAR LA PELICULA Y SU REPARTO"})
 
+# Endpoint para que un usuario pueda calificar una pelicula
+@app.route('/calificarPelicula', methods=['POST'])
+def calificarPelicula():
+    try:
+        data = request.json
+        id_usuario = data['id_usuario']
+        id_pelicula = data['id_pelicula']
+        punteo = data['punteo']
+        controlador.CalificarPelicula(id_usuario,id_pelicula, punteo)
+        return jsonify({"respuesta":"Se ha calificado la pelicula correctamente"})
+    except:
+        return jsonify({'respuesta': "Error: No se pudo calificar la pelicula, intentelo de nuevo."})
+
 @app.route('/agregarComentario', methods=['POST'])
 def agregarComentario():
     try:
