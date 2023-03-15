@@ -148,7 +148,22 @@ def AgregarComentario(id_usuario,id_pelicula, descripcion):
                 (id_usuario, id_pelicula,descripcion))
     conexion.commit()
     conexion.close()
-    
+
+def MostrarComentarios(id_pelicula):
+    conexion = obtener_conexion()
+    comentario = []
+    with conexion.cursor() as cursor:
+        query = """SELECT DESCRIPCION, USUARIO_USU_ID,concat( USUARIO.NOMBRE," ",USUARIO.APELLIDO) as nombre_completo
+                   FROM COMENTARIO
+                   INNER JOIN PELICULA ON COMENTARIO.PELICULA_PEL_ID = PELICULA.PEL_ID
+                   INNER JOIN USUARIO ON  COMENTARIO.USUARIO_USU_ID = USUARIO.USU_ID
+                   WHERE COMENTARIO.PELICULA_PEL_ID =""" + str(id_pelicula)
+        cursor.execute(query)
+        comentario = cursor.fetchall()
+        conexion.close()
+        comentario = [{'comentario': cm[0], 'id_usuario': cm[1],'nombre': cm[2]}for cm in comentario]
+        return comentario
+
     
 def Ultimas5PelActor(id):
     conexion = obtener_conexion()    

@@ -127,6 +127,18 @@ def mostrarActores():
         print("NO SE PUEDE MOSTRAR LOS ACTORES")
         return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LOS ACTORES"})
 
+@app.route('/mostrarComentarios', methods=["GET"])
+def mostrarComentarios():
+    try:
+        data = request.json
+        id_pelicula = data['c']
+        print(id_pelicula)
+        comentarios = controlador.MostrarComentarios(id_pelicula)
+        return jsonify(comentarios)
+    except:
+        return jsonify({'respuesta': "Error: No se pueden mostrar los comentarios, intente denuevo."})
+
+
 # Endpoint para mostrar todas las peliculas registradas
 @app.route('/mostrarPeliculas', methods=["GET"])
 def mostrarPeliculas():
