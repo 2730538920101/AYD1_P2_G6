@@ -54,10 +54,25 @@ function Registro() {
   };
 
   return (
-    <div> 
-    <Container style={{width: "20%"}}>
+    <div>
+      <Container style={{ width: "30%" }}>
         <div style={{ margin: "2%" }}>
-          <h1 style={{ color: 'white' }}>Registro</h1>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h1 style={{ color: "white", margin: "10%" }}>Registro</h1>
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3200/3200751.png"
+              width="150px"
+              height="150px"
+              alt="registroImg"
+            />
+          </div>
           <FormProvider {...methods}>
             <Form onSubmit={handleSubmit(onSubmitForm)}>
               <FormInput

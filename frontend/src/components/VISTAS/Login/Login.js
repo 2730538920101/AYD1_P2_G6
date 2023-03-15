@@ -62,9 +62,24 @@ function Login() {
 
   return (
     <div>
-      <Container style={{width: "20%"}}>
+      <Container style={{ width: "30%" }}>
         <br></br>
-        <h1 style={{ color: 'white' }}>Login</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <h1 style={{ color: "white", margin: "10%" }}>Login</h1>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4616/4616041.png"
+            width="150px"
+            height="150px"
+            alt="loginImg"
+          />
+        </div>
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(onSubmitFormSesion)}>
             <FormInput
