@@ -106,8 +106,11 @@ def agregarPeliculaWatchlist():
         info = request.json
         id_usuario = info['id_usuario']
         id_pelicula = info['id_pelicula']
-        controlador.AgregarPeliculaWatchlist(id_usuario, id_pelicula)
-        return jsonify({"respuesta":"SE AGREGO LA PELICULA AL WATCHLIST CORRECTAMENTE"})
+        id_wat = controlador.AgregarPeliculaWatchlist(id_usuario, id_pelicula)
+        if id_wat is not None:
+            return jsonify({"respuesta":"LA PELICULA YA ESTA INGRESADA EN EL WATCHILST"})
+        else:
+            return jsonify({"respuesta":"SE AGREGO LA PELICULA AL WATCHLIST CORRECTAMENTE"})
     except:
         return jsonify({"respuesta":"NO SE PUEDE AGREGAR LA PELICULA AL WATCHLIST"})
 
