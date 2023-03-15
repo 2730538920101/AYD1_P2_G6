@@ -12,7 +12,7 @@ function Peliculas() {
     await fetch(`${API_URL}/mostrarPeliculas`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setData(data);
       })
       .catch((error) => {
@@ -40,6 +40,7 @@ function Peliculas() {
         accessorKey: "FECHA_ESTRENO",
         header: "Fecha",
         id: "fecha",
+        Cell: ({ row }) => row.original.FECHA_ESTRENO.split("T")[0],
       },
       {
         accessorKey: "TRAILER",
@@ -53,10 +54,43 @@ function Peliculas() {
         Cell: ({ row }) => (
           <div>
             <Link to={`/infoPeli/${row.original.PEL_ID}`}>
-              <Button variant="info">Ver</Button>
+              <Button variant="info">
+                {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <h7 style={{ margin: "5%" }}>Ver</h7>
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/777/777242.png"
+                    width="28px"
+                    height="8px"
+                    alt="ver"
+                  />
+                </div>
+              </Button>
             </Link>
             <Button variant="warning" style={{ margin: "1.5%" }}>
-              Añadir
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <h7 style={{ margin: "5%" }}>Añadir</h7>
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2377/2377810.png"
+                  width="28px"
+                  height="8px"
+                  alt="fav"
+                />
+              </div>
             </Button>
           </div>
         ),
@@ -71,7 +105,30 @@ function Peliculas() {
       <div>
         <br></br>
         <Container>
-          <h1 style={{ color: 'white' }}>Peliculas</h1>
+          <div
+            style={{
+              display: "flex",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h1
+              style={{
+                color: "white",
+                backgroundColor: "#c1121f",
+                borderRadius: "5%",
+                padding: "2%",
+              }}
+            >
+              <b>P E L I C U L A S</b>
+            </h1>
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/705/705062.png"
+              alt="iconoPeli"
+              width="175px"
+              height="175px"
+            />
+          </div>
           <MaterialReactTable
             columns={columns}
             data={data}
