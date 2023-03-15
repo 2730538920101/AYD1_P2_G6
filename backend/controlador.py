@@ -61,10 +61,16 @@ def CalificarPelicula(id_usuario, id_pelicula, punteo):
 def AgregarPeliculaWatchlist(id_usuario, id_pelicula):
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
-        cursor.execute("INSERT INTO WATCHLIST(Usuario_usu_id, Pelicula_pel_id) VALUES (%s, %s)",
-                       (id_usuario, id_pelicula))
+        cursor.execute(
+            "SELECT Wat_id FROM WATCHLIST WHERE Usuario_usu_id = %s AND Pelicula_pel_id = %s", (id_usuario,id_pelicula))
+        usuario = cursor.fetchone()
+
+        if usuario is None:
+            cursor.execute("INSERT INTO WATCHLIST(Usuario_usu_id, Pelicula_pel_id) VALUES (%s, %s)",
+                        (id_usuario, id_pelicula))            
     conexion.commit()
     conexion.close()
+    return usuario
 
 # Controlador para eliminar una pelicula agregada en el watchlist
 def EliminarPeliculaWatchlist(id):
