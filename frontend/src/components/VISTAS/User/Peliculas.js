@@ -7,6 +7,14 @@ import { Link } from "react-router-dom";
 
 function Peliculas() {
   const [data, setData] = useState([]);
+  const [mostrarAlert, setMostrarAlert] = useState(false);
+  const [message, setMessage] = useState();
+  const user = localStorage.getItem("usuario");
+
+  function mostrarComponente() {
+    setMostrarAlert(true);
+    setTimeout(() => setMostrarAlert(false), 3000);
+  }
 
   const verPeliculas = async () => {
     await fetch(`${API_URL}/mostrarPeliculas`)
@@ -14,6 +22,27 @@ function Peliculas() {
       .then((data) => {
         // console.log(data);
         setData(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const añadirFav = async (id) => {
+    console.log(id);
+    let bodyFav = {
+      id_usuario: user,
+      id_pelicula: id,
+    };
+    await fetch(`${API_URL}/agregarPeliculaWatchlist`, {
+      method: "POST",
+      body: JSON.stringify(bodyFav),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMessage(data.respuesta);
+        mostrarComponente();
       })
       .catch((error) => {
         console.log(error);
@@ -74,7 +103,13 @@ function Peliculas() {
                 </div>
               </Button>
             </Link>
-            <Button variant="warning" style={{ margin: "1.5%" }}>
+            <Button
+              variant="warning"
+              style={{ margin: "1.5%" }}
+              onClick={() => {
+                añadirFav(row.original.PEL_ID);
+              }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -140,6 +175,14 @@ function Peliculas() {
             enableTopToolbar={true}
             muiTableBodyRowProps={{ hover: true }}
           />
+          {mostrarAlert && (
+            <div
+              className="alert alert-dismissible alert-warning"
+              style={{ margin: "3%" }}
+            >
+              {message}
+            </div>
+          )}
         </Container>
       </div>
     </>
