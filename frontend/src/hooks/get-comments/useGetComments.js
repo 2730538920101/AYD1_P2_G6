@@ -7,7 +7,7 @@ const useGetComments = (id) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    async function getMovie() {
+    async function getComments() {
       setStatus("procesando");
       await fetch(`${API_URL}/mostrarComentarios/${id}`, {
         method: "GET",
@@ -23,8 +23,7 @@ const useGetComments = (id) => {
           setStatus("not ok");
         });
     }
-
-    getMovie();
+    getComments();
   }, [id]);
 
   return [status, error, data];

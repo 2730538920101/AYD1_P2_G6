@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, FloatingLabel, Form, Spinner } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import useGetMovie from "../../hooks/get-movie/useGetMovie";
@@ -8,11 +8,21 @@ import Rating from "@mui/material/Rating";
 import TextField from "@mui/material/TextField";
 
 import API_URL from "../../app/constants";
+import ShowComments from "../show-comments/ShowComments";
 const Movie = () => {
   const params = useParams();
   const [status, error, movie] = useGetMovie(params.id);
-  const [statusComments, errorComments, coments] = useGetComments(params.id);
+  const [statusComments, errorComments, comments] = useGetComments(params.id);
   const [rateValue, setRateValue] = useState(-1);
+  const user = localStorage.getItem("usuario");
+  const [comment, setComment] = useState("");
+  const [commentPosted, setCommentPosted] = useState(false)
+
+  useEffect(() => {
+
+  }, [commentPosted]);
+
+
 
   if (status !== "ok" && statusComments !== "ok") {
     return (
@@ -39,7 +49,7 @@ const Movie = () => {
   }
 
   const renderReparto = () => {
-    if (movie) {
+    if (movie && movie.length > 0) {
       return movie.REPARTO.map(
         (item, index) =>
           index < 5 && (
@@ -58,25 +68,32 @@ const Movie = () => {
     return null;
   };
 
-  const handleOnComment = async() => {
+  const handleOnComment = async () => {
+    if (comment === "") {
+      return;
+    }
+
+    const bodyRequest = {
+      id_usuario: user,
+      id_pelicula: params.id,
+      descripcion: comment,
+    };
     await fetch(`${API_URL}/agregarComentario`, {
       method: "POST",
-      body: {
-        id_usuario: "",
-        id_pelicula: "",
-        descripcion: ""
-      },
+      body: JSON.stringify(bodyRequest),
       headers: { "Content-type": "application/json; charset=UTF-8" },
     })
       .then((response) => response.json())
       .then(() => {
-
+        setComment("");
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
+      })
+      .finally(() => {
+        setComment("");
       });
-
-  }
+  };
 
   return (
     <>
@@ -110,7 +127,11 @@ const Movie = () => {
               <Form.Control
                 type="text"
                 disabled
-                value={movie.FECHA_ESTRENO ? new Date(movie.FECHA_ESTRENO).toLocaleDateString("en-US") : ""}
+                value={
+                  movie.FECHA_ESTRENO
+                    ? new Date(movie.FECHA_ESTRENO).toLocaleDateString("en-US")
+                    : ""
+                }
               />
             </FloatingLabel>
           </Form.Group>
@@ -144,8 +165,8 @@ const Movie = () => {
           />
         </div>
       </div>
-      <div className="mt-3 p-2 w-full rounded-md ml-5">
-        <h2 style={{ color: "white" }}>Deja un comentario</h2>
+      <div className="mt-3 p-2 w-full rounded-md ml-5 flex flex-col mx-auto align-items-center ">
+        <h3 style={{ color: "white" }}>Deja un comentario</h3>
         <div style={{ width: "50%", border: "none", borderRadius: "10px" }}>
           <TextField
             sx={{
@@ -159,8 +180,15 @@ const Movie = () => {
             variant="filled"
             multiline
             rows={3}
+            value={comment}
+            onChange={(e) => setComment(e.target.value.toString())}
           />
-          <Button className="flex flex-col ml-auto " onClick={handleOnComment}>Comentar</Button>
+          <Button className="flex flex-col ml-auto " onClick={handleOnComment}>
+            Comentar
+          </Button>
+
+          <h4 className="text-white p-2">Comentarios</h4>
+          <ShowComments comments={comments} />
         </div>
       </div>
     </>
