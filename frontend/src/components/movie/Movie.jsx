@@ -2,29 +2,44 @@ import { useEffect, useState } from "react";
 import { Alert, Button, FloatingLabel, Form, Spinner } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import useGetMovie from "../../hooks/get-movie/useGetMovie";
-import useGetComments from "../../hooks/get-comments/useGetComments";
 import NavbarU from "../Navbars/NavbarU";
 import Rating from "@mui/material/Rating";
 import TextField from "@mui/material/TextField";
 
 import API_URL from "../../app/constants";
 import ShowComments from "../show-comments/ShowComments";
+import useGetRateValue from "../../hooks/get-rateValue/useGetRateValue";
 const Movie = () => {
   const params = useParams();
-  const [status, error, movie] = useGetMovie(params.id);
-  const [statusComments, errorComments, comments] = useGetComments(params.id);
-  const [rateValue, setRateValue] = useState(-1);
   const user = localStorage.getItem("usuario");
+  const [status, error, movie] = useGetMovie(params.id);
+  const [statusRate, errorRate, rate] = useGetRateValue(user, params.id);
+  const [comments, setComments] = useState([]);
+  const [rateValue, setRateValue] = useState(-1);
   const [comment, setComment] = useState("");
-  const [commentPosted, setCommentPosted] = useState(false)
+  const [commentPosted, setCommentPosted] = useState(false);
 
   useEffect(() => {
-
+    async function getComments() {
+      await fetch(`${API_URL}/mostrarComentarios/${params.id}`, {
+        method: "GET",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          setComments(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    getComments();
   }, [commentPosted]);
+  useEffect(() => {
+    setRateValue(rate);
+  }, [rate]);
 
-
-
-  if (status !== "ok" && statusComments !== "ok") {
+  if (status !== "ok" && statusRate !== "ok") {
     return (
       <Spinner
         animation="border"
@@ -36,7 +51,7 @@ const Movie = () => {
     );
   }
 
-  if (error !== undefined && errorComments !== undefined) {
+  if (error !== undefined && errorRate !== undefined) {
     return (
       <Alert show={true} variant="danger" dismissible className="p-2">
         <Alert.Heading>Error inesperado x(</Alert.Heading>
@@ -49,20 +64,24 @@ const Movie = () => {
   }
 
   const renderReparto = () => {
-    if (movie && movie.length > 0) {
-      return movie.REPARTO.map(
-        (item, index) =>
-          index < 5 && (
-            <li key={item.ACT_ID} className="inline">
-              <Link
-                to={`/infoActor/${item.ACT_ID}`}
-                style={{ fontSize: "20px", color: "white" }}
-              >
-                {item.NOMBRE}
-              </Link>
-            </li>
-          )
-      );
+    try {
+      if (movie) {
+        return movie.REPARTO.map(
+          (item, index) =>
+            index < 5 && (
+              <li key={item.ACT_ID} className="inline">
+                <Link
+                  to={`/infoActor/${item.ACT_ID}`}
+                  style={{ fontSize: "20px", color: "white" }}
+                >
+                  {item.NOMBRE}
+                </Link>
+              </li>
+            )
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     return null;
@@ -86,6 +105,30 @@ const Movie = () => {
       .then((response) => response.json())
       .then(() => {
         setComment("");
+        setCommentPosted(!commentPosted);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setComment("");
+      });
+  };
+
+  const handleOnRating = async (e, newValue) => {
+    e.preventDefault();
+    await fetch(`${API_URL}/calificarPelicula`, {
+      method: "POST",
+      body: JSON.stringify({
+        id_usuario: user,
+        id_pelicula: params.id,
+        punteo: +newValue,
+      }),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setRateValue(newValue);
       })
       .catch((error) => {
         console.log(error);
@@ -98,59 +141,35 @@ const Movie = () => {
   return (
     <>
       <NavbarU />
-      <div className="grid grid-cols-2 grid-rows-1 g-3 p-2">
-        <div className="justify-items-start w-full">
-          <Form.Group className="p-3 w-auto" controlId="name">
-            <FloatingLabel controlId="name" label="Nombre" className="mb-3">
-              <Form.Control
-                type="text"
-                disabled
-                value={movie.NOMBRE ? movie.NOMBRE : ""}
-              />
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="p-3 w-auto" controlId="name">
-            <FloatingLabel controlId="name" label="Director" className="mb-3">
-              <Form.Control
-                type="text"
-                disabled
-                value={movie.DIRECTOR ? movie.DIRECTOR : ""}
-              />
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="p-3 w-auto" controlId="name">
-            <FloatingLabel
-              controlId="name"
-              label="Fecha de Estreno"
-              className="mb-3"
-            >
-              <Form.Control
-                type="text"
-                disabled
-                value={
-                  movie.FECHA_ESTRENO
-                    ? new Date(movie.FECHA_ESTRENO).toLocaleDateString("en-US")
-                    : ""
-                }
-              />
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group className="p-3 w-auto" controlId="name">
-            <FloatingLabel controlId="name" label="Resumen" className="mb-3">
-              <Form.Control
-                type="text"
-                as="textarea"
-                disabled
-                value={movie.RESUMEN ? movie.RESUMEN : ""}
-              />
-            </FloatingLabel>
-          </Form.Group>
+      <div className="grid grid-cols-2 grid-rows-1 g-3 p-2 ">
+        <div className="justify-items-start w-full ">
+          <h1 className="text-white flex flex-col align-items-center justify-center ml-auto">
+            {movie.NOMBRE ? movie.NOMBRE : ""}
+          </h1>
+          <div className="inline m-2">
+            <small className="text-white">Resumen:</small>
+            <p className="text-gray-200	flex flex-col align-items-center ml-auto">
+              {movie.RESUMEN}
+            </p>
+          </div>
+          <div className="inline m-1">
+            <small className="text-white">Director:</small>
+            <p className="text-gray-200	flex flex-col align-items-center ml-auto">
+              {movie.DIRECTOR}
+            </p>
+          </div>
+          <div className="inline m-1">
+            <small className="text-white">Fecha De Estreno:</small>
+            <p className="text-gray-200	flex flex-col align-items-center ml-auto">
+              {new Date(movie.FECHA_ESTRENO).toLocaleDateString("en-US")}
+            </p>
+          </div>
         </div>
         <div className="flex align-items-start justify-center w-full">
-          <img
-            className="max-w-none w-96 flex justify-center align-items-center"
-            src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-            alt="no-image"
+          <embed
+            variant="top"
+            className="max-w-none w-96 flex justify-center align-items-center h-full"
+            src={`https://www.youtube.com/embed/` + movie.FOTO}
           />
         </div>
         <div className="flex justify-center h-8">
@@ -158,10 +177,10 @@ const Movie = () => {
         </div>
         <div className="flex align-items-start justify-center h-8">
           <Rating
-            name="disabled"
+            name="rating"
             value={rateValue}
             size="large"
-            onChange={(event, newValue) => setRateValue(newValue)}
+            onChange={(event, newValue) => handleOnRating(event, newValue)}
           />
         </div>
       </div>
@@ -183,7 +202,11 @@ const Movie = () => {
             value={comment}
             onChange={(e) => setComment(e.target.value.toString())}
           />
-          <Button className="flex flex-col ml-auto " onClick={handleOnComment}>
+          <Button
+            className="flex align-items-end justify-end mx-auto"
+            variant="success"
+            onClick={handleOnComment}
+          >
             Comentar
           </Button>
 
