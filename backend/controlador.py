@@ -191,7 +191,7 @@ def MostrarWatchlist(id_usuario):
     conexion = obtener_conexion()
     Watchlist = []
     with conexion.cursor() as cursor:
-        query = """SELECT PELICULA.NOMBRE 
+        query = """SELECT PELICULA.NOMBRE, PELICULA.PEL_ID, PELICULA.FECHA_ESTRENO, PELICULA.TRAILER, WATCHLIST.WAT_ID
                    FROM WATCHLIST 
                    INNER JOIN PELICULA ON WATCHLIST.PELICULA_PEL_ID = PELICULA.PEL_ID 
                    WHERE WATCHLIST.USUARIO_USU_ID = """ + str(id_usuario)
@@ -199,5 +199,5 @@ def MostrarWatchlist(id_usuario):
         Watchlist = cursor.fetchall()
         print(Watchlist)
         conexion.close()
-        Watchlist = [{'nombre_pelicula': wlist[0]}for wlist in Watchlist]
+        Watchlist = [{'nombre_pelicula': wlist[0], 'id_pelicula':wlist[1], 'fecha':wlist[2], 'trailer':wlist[3], 'id_wl':wlist[4]}for wlist in Watchlist]
         return Watchlist

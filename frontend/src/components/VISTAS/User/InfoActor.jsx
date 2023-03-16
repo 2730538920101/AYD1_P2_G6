@@ -2,7 +2,7 @@ import React from 'react'
 import NavbarU from '../../Navbars/NavbarU'
 import { Link, useParams } from "react-router-dom";
 import GetActor from "../../../hooks/get-actor/GetActor.js";
-import { Alert, FloatingLabel, Form, Spinner, Container, ListGroup, Card } from "react-bootstrap";
+import { Alert, FloatingLabel, Form, Spinner, Container } from "react-bootstrap";
 import GetMovies from "../../../hooks/get-movies/useGetMovies";
 
 function InfoActor() {

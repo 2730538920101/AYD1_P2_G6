@@ -32,8 +32,7 @@ function Login() {
     setTimeout(() => setMostrarAlert(false), 3000);
   }
 
-  const onSubmitFormSesion = async (values) => {
-    console.log(values);
+  const onSubmitFormSesion = async (values) => { 
     if (values.nombre === "admin" && values.contrasenia === "admin") {
       navigate("/NuevaPelicula");
     } else {
