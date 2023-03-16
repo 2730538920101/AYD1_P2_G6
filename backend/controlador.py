@@ -57,6 +57,17 @@ def CalificarPelicula(id_usuario, id_pelicula, punteo):
     conexion.commit()
     conexion.close()
 
+# Controlador para retornar la calificacion que un usuario le da a una pelicula
+def DevolverCalificacion(id_usuario, id_pelicula):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute(
+            "SELECT PUNTEO FROM CALIFICACION WHERE USUARIO_USU_ID = %s AND PELICULA_PEL_ID = %s", (id_usuario,id_pelicula))
+        calificacion = cursor.fetchone()
+        conexion.close()
+        return calificacion
+
+
 # Controlador para agregar una pelicula al watchlist
 def AgregarPeliculaWatchlist(id_usuario, id_pelicula):
     conexion = obtener_conexion()
