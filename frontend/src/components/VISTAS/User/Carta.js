@@ -9,7 +9,7 @@ function Carta(props) {
   };
 
   const eliminar = () => {
-    fetch(`https://localhost:5000/eliminarPeliculaWatchlist/${props.idW}`, {
+    fetch(`http://localhost:5000/eliminarPeliculaWatchlist/${props.idW}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
