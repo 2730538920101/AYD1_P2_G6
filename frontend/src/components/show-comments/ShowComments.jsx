@@ -10,7 +10,6 @@ const ShowComments = (comments) => {
         </li>
       ));
     } else {
-      console.log("error hdtptm")
     }
   };
 

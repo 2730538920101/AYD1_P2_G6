@@ -87,12 +87,12 @@ def calificarPelicula():
         return jsonify({'respuesta': "Error: No se pudo calificar la pelicula, intentelo de nuevo."})
 
 # Endpoint para retornar la calificacion de una pelicula
-@app.route('/devolverCalificacion', methods=['GET'])
-def devolverCalificacion():
+@app.route('/devolverCalificacion/<int:id_pelicula>/<int:id_usuario>', methods=['GET'])
+def devolverCalificacion(id_pelicula, id_usuario):
     try:
-        data = request.json
-        id_usuario = data['id_usuario']
-        id_pelicula = data['id_pelicula']
+        # data = request.json
+        # id_usuario = data['id_usuario']
+        # id_pelicula = data['id_pelicula']
         cal = controlador.DevolverCalificacion(id_usuario,id_pelicula)
         if(cal != None):
             return jsonify({"respuesta":cal})
