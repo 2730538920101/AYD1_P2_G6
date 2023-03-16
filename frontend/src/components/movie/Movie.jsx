@@ -1,15 +1,30 @@
+import { useEffect, useState } from "react";
 import { Alert, Button, FloatingLabel, Form, Spinner } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import useGetMovie from "../../hooks/get-movie/useGetMovie";
+import useGetComments from "../../hooks/get-comments/useGetComments";
 import NavbarU from "../Navbars/NavbarU";
 import Rating from "@mui/material/Rating";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 
+import API_URL from "../../app/constants";
+import ShowComments from "../show-comments/ShowComments";
 const Movie = () => {
   const params = useParams();
   const [status, error, movie] = useGetMovie(params.id);
+  const [statusComments, errorComments, comments] = useGetComments(params.id);
+  const [rateValue, setRateValue] = useState(-1);
+  const user = localStorage.getItem("usuario");
+  const [comment, setComment] = useState("");
+  const [commentPosted, setCommentPosted] = useState(false)
 
-  if (status !== "ok") {
+  useEffect(() => {
+
+  }, [commentPosted]);
+
+
+
+  if (status !== "ok" && statusComments !== "ok") {
     return (
       <Spinner
         animation="border"
@@ -21,7 +36,7 @@ const Movie = () => {
     );
   }
 
-  if (error !== undefined) {
+  if (error !== undefined && errorComments !== undefined) {
     return (
       <Alert show={true} variant="danger" dismissible className="p-2">
         <Alert.Heading>Error inesperado x(</Alert.Heading>
@@ -34,18 +49,50 @@ const Movie = () => {
   }
 
   const renderReparto = () => {
-    if (movie) {
+    if (movie && movie.length > 0) {
       return movie.REPARTO.map(
         (item, index) =>
           index < 5 && (
             <li key={item.ACT_ID} className="inline">
-              <Link to={`/infoActor/${item.ACT_ID}`} style={{ fontSize: '20px', color: "white" }}>{item.NOMBRE}</Link>
+              <Link
+                to={`/infoActor/${item.ACT_ID}`}
+                style={{ fontSize: "20px", color: "white" }}
+              >
+                {item.NOMBRE}
+              </Link>
             </li>
           )
       );
     }
 
     return null;
+  };
+
+  const handleOnComment = async () => {
+    if (comment === "") {
+      return;
+    }
+
+    const bodyRequest = {
+      id_usuario: user,
+      id_pelicula: params.id,
+      descripcion: comment,
+    };
+    await fetch(`${API_URL}/agregarComentario`, {
+      method: "POST",
+      body: JSON.stringify(bodyRequest),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setComment("");
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setComment("");
+      });
   };
 
   return (
@@ -80,7 +127,11 @@ const Movie = () => {
               <Form.Control
                 type="text"
                 disabled
-                value={movie.FECHA_ESTRENO ? movie.FECHA_ESTRENO : ""}
+                value={
+                  movie.FECHA_ESTRENO
+                    ? new Date(movie.FECHA_ESTRENO).toLocaleDateString("en-US")
+                    : ""
+                }
               />
             </FloatingLabel>
           </Form.Group>
@@ -102,28 +153,43 @@ const Movie = () => {
             alt="no-image"
           />
         </div>
-        <div className="flex justify-center h-8"> 
+        <div className="flex justify-center h-8">
           <ul className="inline-block space-x-4">{renderReparto()}</ul>
         </div>
         <div className="flex align-items-start justify-center h-8">
-          <Rating name="disabled" value={2} size="large" />
+          <Rating
+            name="disabled"
+            value={rateValue}
+            size="large"
+            onChange={(event, newValue) => setRateValue(newValue)}
+          />
         </div>
       </div>
-      <div className="mt-3 p-2 w-full">
-        <h2 style={{ color: 'white' }}>Deja un comentario</h2>
-
-        <div style={{ backgroundColor: 'white', width: '50%', border: 'none', borderRadius: '10px' }}>
+      <div className="mt-3 p-2 w-full rounded-md ml-5 flex flex-col mx-auto align-items-center ">
+        <h3 style={{ color: "white" }}>Deja un comentario</h3>
+        <div style={{ width: "50%", border: "none", borderRadius: "10px" }}>
           <TextField
-            sx={{ width: "100%", padding: "2" }}
+            sx={{
+              width: "100%",
+              padding: "2",
+              backgroundColor: "white",
+              borderRadius: "10px",
+            }}
             id="outlined-multiline-flexible"
             label="Deja tu comentario"
             variant="filled"
             multiline
-            rows={5}
+            rows={3}
+            value={comment}
+            onChange={(e) => setComment(e.target.value.toString())}
           />
+          <Button className="flex flex-col ml-auto " onClick={handleOnComment}>
+            Comentar
+          </Button>
+
+          <h4 className="text-white p-2">Comentarios</h4>
+          <ShowComments comments={comments} />
         </div>
-
-
       </div>
     </>
   );
