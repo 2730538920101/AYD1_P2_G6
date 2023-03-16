@@ -131,3 +131,18 @@ def VerActor(id):
                         "FOTO":pelicula[3], "FECHA_NACIMIENTO":pelicula[4]}
     conexion.close()
     return peliculajson
+
+def MostrarWatchlist(id_usuario):
+    conexion = obtener_conexion()
+    Watchlist = []
+    with conexion.cursor() as cursor:
+        query = """SELECT PELICULA.NOMBRE 
+                   FROM WATCHLIST 
+                   INNER JOIN PELICULA ON WATCHLIST.PELICULA_PEL_ID = PELICULA.PEL_ID 
+                   WHERE WATCHLIST.USUARIO_USU_ID = """ + str(id_usuario)
+        cursor.execute(query)
+        Watchlist = cursor.fetchall()
+        print(Watchlist)
+        conexion.close()
+        Watchlist = [{'nombre_pelicula': wlist[0]}for wlist in Watchlist]
+        return Watchlist
