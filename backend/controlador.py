@@ -186,3 +186,18 @@ order by str_to_date(PELICULA.FECHA_ESTRENO, '%d/%m/%y') DESC LIMIT 5;'''
         peliculaJSON = [{"PEL_ID":pelicula[0], "NOMBRE":pelicula[1], "DIRECTOR": pelicula[2], "FECHA_ESTRENO":pelicula[3], "RESUMEN":pelicula[4], "TRAILER":pelicula[5] }for pelicula in peliculas]
     conexion.close()
     return peliculaJSON
+
+def MostrarWatchlist(id_usuario):
+    conexion = obtener_conexion()
+    Watchlist = []
+    with conexion.cursor() as cursor:
+        query = """SELECT PELICULA.NOMBRE 
+                   FROM WATCHLIST 
+                   INNER JOIN PELICULA ON WATCHLIST.PELICULA_PEL_ID = PELICULA.PEL_ID 
+                   WHERE WATCHLIST.USUARIO_USU_ID = """ + str(id_usuario)
+        cursor.execute(query)
+        Watchlist = cursor.fetchall()
+        print(Watchlist)
+        conexion.close()
+        Watchlist = [{'nombre_pelicula': wlist[0]}for wlist in Watchlist]
+        return Watchlist

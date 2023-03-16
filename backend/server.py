@@ -181,6 +181,15 @@ def mostrarUltimas5PelisActor(id):
         print("NO SE PUEDE MOSTRAR LAS PELICULAS DEL ACTOR CON EL ID " + str(id))
         return jsonify({'respuesta': "NO SE PUEDE MOSTRAR LAS PELICULAS DEL ACTOR CON EL ID " + str(id)})   
     
+@app.route('/mostrarWatchlist/<int:id>', methods=["GET"])
+def mostrarWatchlist(id):
+    try:
+        Watchlist = controlador.MostrarWatchlist(id)   
+        return Watchlist
+    except:
+        print("Error: No es posible mostrar el Watchlist del usuario.")
+        return jsonify({'respuesta': "Error: No es posible mostrar el Watchlist del usuario."})
+
 
 if __name__ == '__main__':
     print("SERVIDOR INICIADO EN EL PUERTO: 5000")
