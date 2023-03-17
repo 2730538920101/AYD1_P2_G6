@@ -1,7 +1,6 @@
 from conexion import obtener_conexion
+from werkzeug import check_password_hash, generate_password_hash
 
-<<<<<<< HEAD
-=======
 # Controlador para buscar contactos en la base de datos
 def BuscarUsuario(nombre_usuario, contrasenia):
     conexion = obtener_conexion()
@@ -213,4 +212,3 @@ def MostrarWatchlist(id_usuario):
         conexion.close()
         Watchlist = [{'nombre_pelicula': wlist[0], 'id_pelicula':wlist[1], 'fecha':wlist[2], 'trailer':wlist[3], 'id_wl':wlist[4]}for wlist in Watchlist]
         return Watchlist
->>>>>>> 1.0.0
