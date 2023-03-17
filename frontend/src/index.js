@@ -1,9 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+<<<<<<< HEAD
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+=======
+import App from './App'; 
+// // Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+// // Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+>>>>>>> 1.0.0
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
