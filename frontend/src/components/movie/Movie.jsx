@@ -18,6 +18,7 @@ const Movie = () => {
   const [rateValue, setRateValue] = useState(-1);
   const [comment, setComment] = useState("");
   const [commentPosted, setCommentPosted] = useState(false);
+  const [urlTrailer, setUrlTrailer] = useState("");
 
   useEffect(() => {
     async function getComments() {
@@ -35,9 +36,22 @@ const Movie = () => {
     }
     getComments();
   }, [commentPosted]);
+
   useEffect(() => {
     setRateValue(rate);
   }, [rate]);
+
+  useEffect(() => {
+    try {
+      if(status === "ok"){
+        const url = movie.TRAILER.toString();
+        const video = url.split("v=")
+        setUrlTrailer(video[1])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }, [status]);
 
   if (status !== "ok" && statusRate !== "ok") {
     return (
@@ -169,7 +183,7 @@ const Movie = () => {
           <embed
             variant="top"
             className="max-w-none w-96 flex justify-center align-items-center h-full"
-            src={`https://www.youtube.com/embed/` + movie.FOTO}
+            src={`https://www.youtube.com/embed/` + urlTrailer}
           />
         </div>
         <div className="flex justify-center h-8">
