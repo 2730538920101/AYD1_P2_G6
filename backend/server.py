@@ -23,8 +23,6 @@ def BuscarUsuario(nombre, contrasenia):
     usuario = controlador.BuscarUsuario(nombre, contrasenia)
     return jsonify({"respuesta":usuario})
 
-<<<<<<< HEAD
-=======
 # Endpoint para almacenar un usuario en la base de datos    
 @app.route('/crearUsuario', methods=['POST'])
 def crearUsuario():
@@ -207,7 +205,6 @@ def mostrarWatchlist(id):
         print("Error: No es posible mostrar el Watchlist del usuario.")
         return jsonify({'respuesta': "Error: No es posible mostrar el Watchlist del usuario."})
 
->>>>>>> 1.0.0
 
 if __name__ == '__main__':
     print("SERVIDOR INICIADO EN EL PUERTO: 5000")

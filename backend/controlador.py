@@ -1,11 +1,6 @@
 from conexion import obtener_conexion
-<<<<<<< HEAD
 from werkzeug.security import check_password_hash, generate_password_hash
-=======
->>>>>>> parent of 9ebd27b... [UPDATE] main branch dependencies
 
-<<<<<<< HEAD
-=======
 # Controlador para buscar contactos en la base de datos
 def BuscarUsuario(nombre_usuario, contrasenia):
     conexion = obtener_conexion()
@@ -216,9 +211,5 @@ def MostrarWatchlist(id_usuario):
         print(Watchlist)
         conexion.close()
         Watchlist = [{'nombre_pelicula': wlist[0], 'id_pelicula':wlist[1], 'fecha':wlist[2], 'trailer':wlist[3], 'id_wl':wlist[4]}for wlist in Watchlist]
-<<<<<<< HEAD
         return Watchlist
-=======
-        return Watchlist
->>>>>>> 1.0.0
->>>>>>> parent of 9ebd27b... [UPDATE] main branch dependencies
+
